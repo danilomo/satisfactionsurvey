@@ -1,0 +1,75 @@
+/*
+Copyright (C) 2017 ca
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* 
+    Created on : Sep 2, 2017, 2:26:38 PM
+    Author     : ca
+*/
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background: #c8e7fd;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+h1, form {
+    text-align: center;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+input[type='checkbox'] {
+    display: none;
+}
+
+form {
+    width: 50%;
+    margin: 5% auto;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    justify-content: space-around;
+}
+
+label {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 4em;
+    color: #FFFFFF;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    transition: .8s all;
+}
+
+label:hover {
+    transform: scale(1.1);
+}
+
+#satisfactionlvl0 {
+    background: red;
+}
+
+#satisfactionlvl1 {
+    background: green;
+}

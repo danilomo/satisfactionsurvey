@@ -22,11 +22,20 @@
  *
  * @author ca
  */
+namespace Classes;
+
+use Classes\Postgres\Connection as Connection;
+
 class SatisfactionSurvey {
     private $satisfactionLevel;
+    private $pdo;
+    private $viewLevel;
     
     public function __construct(string $lang = 'us')
     {
+        //Connects to Database
+        $this->pdo = Connection::get()->connect();
+        $this->viewLevel = 0;
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -34,14 +43,18 @@ class SatisfactionSurvey {
             $this->setSatisfactionLevel(
                 filter_input(INPUT_POST, 'satisfactionlevel', FILTER_VALIDATE_INT)
             );
-            $this->save();
+            if ($this->save()) {
+                $this->viewLevel = 1;
+            }
         }
         $_SESSION['lang'] = $this->getLang($lang);
     }
     
     public function save(): bool
     {
-        return true;
+        return $this->pdo->exec(
+            "INSERT INTO survey(level) VALUES ({$this->getSatisfactionLevel()})"
+        );
     }
     
     public function setSatisfactionLevel(int $satisfactionLevel)
@@ -54,14 +67,26 @@ class SatisfactionSurvey {
         return $this->satisfactionLevel;
     }
     
+    public function getViewLevel(): int
+    {
+        return $this->viewLevel;
+    }
+    
     private function getLang(string $langType = 'us'): array
     {
         return parse_ini_file("lang/$langType.ini", true);
     }
     
-    public function renderView() 
+    public function renderView(): void 
     {
-        include_once('templates/mainscreen.php');
+        switch ($this->getViewLevel()) {
+            case 1:
+                include_once('templates/finalscreen.php');
+                break;
+            default:
+                include_once('templates/mainscreen.php');
+                break;
+        }
     }
     
 }

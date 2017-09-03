@@ -4,10 +4,15 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<?php spl_autoload_register(function ($class_name) {
-    include_once 'class/' . $class_name . '.php';
-}); 
-$objSatisfactionSurvey = new SatisfactionSurvey('us');
+<?php 
+//PSR-4 Autoloader
+spl_autoload_register(function ($class_name) {
+    $class_name = str_replace("\\", "/", $class_name) . '.php';
+    if (file_exists($class_name)) {
+        require_once $class_name;
+    }
+});
+$objSatisfactionSurvey = new Classes\SatisfactionSurvey('us');
 ?>
 <html>
     <head>

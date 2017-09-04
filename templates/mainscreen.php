@@ -17,7 +17,7 @@
  */
 -->
 <h1><?= $_SESSION['lang']['project']['name']; ?></h1>
-<form name="survey" method="POST">
+<form name="survey" method="POST" id="survey">
     <label id='satisfactionlvl1'>
         <input type="checkbox" name="satisfactionlevel" value="1" />
         <?= $_SESSION['lang']['options']['agree']; ?>

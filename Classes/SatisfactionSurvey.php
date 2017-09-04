@@ -35,19 +35,44 @@ class SatisfactionSurvey {
     {
         //Connects to Database
         $this->pdo = Connection::get()->connect();
-        $this->viewLevel = 0;
+        $this->viewLevel = $_GET['view'] ?? 0;
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        if (count($_POST) > 0) {
+        if (isset($_POST['satisfactionlevel'])) {
             $this->setSatisfactionLevel(
                 filter_input(INPUT_POST, 'satisfactionlevel', FILTER_VALIDATE_INT)
             );
             if ($this->save()) {
-                $this->viewLevel = 1;
+                $this->viewLevel = 999;
             }
         }
         $_SESSION['lang'] = $this->getLang($lang);
+    }
+    
+    public function getSurvey(array $period): array
+    {
+        $period = array_map(function($key, $value){
+            $value .= ($key == 0) ? ' 00:00:00' : ' 23:59:59';
+            return date('Y-m-d H:i:s', strtotime($value));
+        }, array_keys($period), $period);
+        try {
+            $where = '';
+            if (count($period) > 0) {
+                $where = " WHERE created_at
+                           BETWEEN SYMMETRIC '{$period[0]}' AND '{$period[1]}' ";
+            }
+            $query = $this->pdo->query(
+                "SELECT level, created_at
+                 FROM survey
+                 $where
+                 ORDER BY created_at DESC "
+            );
+                 
+            return $query->fetchAll(\PDO::FETCH_NAMED);
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
+        }
     }
     
     public function save(): bool
@@ -66,7 +91,13 @@ class SatisfactionSurvey {
     {
         return $this->satisfactionLevel;
     }
-    
+    /**
+     * View Level
+     * 0 -> Initial page
+     * 1 -> Admin page
+     * 999 -> Thank you page
+     * @return int
+     */
     public function getViewLevel(): int
     {
         return $this->viewLevel;
@@ -79,8 +110,12 @@ class SatisfactionSurvey {
     
     public function renderView(): void 
     {
+        $objSatisfactionSurvey = $this;
         switch ($this->getViewLevel()) {
             case 1:
+                include_once('templates/admin.php');
+                break;
+            case 999:
                 include_once('templates/finalscreen.php');
                 break;
             default:

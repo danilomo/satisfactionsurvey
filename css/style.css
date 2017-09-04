@@ -39,6 +39,10 @@ input[type='checkbox'] {
     display: none;
 }
 
+input[type='submit'] {
+    cursor: pointer;
+}
+
 form {
     width: 50%;
     margin: 5% auto;
@@ -49,7 +53,7 @@ form {
     justify-content: space-around;
 }
 
-label {
+#survey label {
     width: 12rem;
     height: 12rem;
     border-radius: 50%;
@@ -65,6 +69,28 @@ label {
 label:hover {
     transform: scale(1.1);
 }
+
+table {
+    width: 60%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    text-align: center;
+    cursor: default;
+}
+
+th, td, tr, caption {
+    padding: 10px;
+    border: 1px solid #000000;
+}
+
+caption {
+    border-bottom: none;
+    font-size: 1.4em;
+}
+
+td:hover {
+    background: #ccc;
+} 
 
 #satisfactionlvl0 {
     background: red;
